@@ -1,0 +1,7 @@
+services:
+  network-deploy-service:
+    networks:
+      - vision-network
+
+networks:
+  vision-network:
