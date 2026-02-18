@@ -20,9 +20,9 @@ import java.util.List;
 public class ClassEntity extends BaseEntity {
 
     @Column(nullable = false, unique = true)
-    private String classCode;
+    private String batchCode;
 
-    @OneToMany(mappedBy = "classEntity")
+    @OneToMany(mappedBy = "batch")
     private List<StudentEntity> students;
 
 

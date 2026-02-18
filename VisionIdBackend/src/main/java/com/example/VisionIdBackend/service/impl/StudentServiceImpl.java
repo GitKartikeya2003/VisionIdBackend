@@ -1,0 +1,51 @@
+package com.example.VisionIdBackend.service.impl;
+
+import com.example.VisionIdBackend.dto.StudentDto;
+import com.example.VisionIdBackend.entity.ClassEntity;
+import com.example.VisionIdBackend.entity.StudentEntity;
+import com.example.VisionIdBackend.exception.StudentAlreadyExistsException;
+import com.example.VisionIdBackend.mapper.StudentMapper;
+import com.example.VisionIdBackend.repository.ClassRepository;
+import com.example.VisionIdBackend.repository.StudentRepository;
+import com.example.VisionIdBackend.service.IStudentService;
+import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+
+
+@Service
+@AllArgsConstructor
+public class StudentServiceImpl implements IStudentService {
+
+    @Autowired
+    private StudentRepository studentRepository;
+
+    @Autowired
+    private ClassRepository classRepository;
+
+
+
+    @Override
+    public void createStudent(StudentDto studentDto) {
+
+        StudentEntity studentEntity = StudentMapper.mapToStudentEntity(studentDto);
+
+        Optional<StudentEntity> studentEntityOptional = studentRepository.findByRollNo(studentEntity.getRollNo());
+
+        if(studentEntityOptional.isPresent()){
+            throw new StudentAlreadyExistsException(studentEntity.getRollNo());
+        }
+
+        ClassEntity batch = classRepository
+                .findByBatchCode(studentDto.getBatchCode())
+                .orElseThrow(() -> new RuntimeException("Batch not found"));
+
+
+        studentEntity.setBatch(batch);
+
+        studentRepository.save(studentEntity);
+
+    }
+}

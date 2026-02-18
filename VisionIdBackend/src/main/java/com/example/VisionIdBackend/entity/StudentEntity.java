@@ -21,18 +21,15 @@ public class StudentEntity extends BaseEntity {
 
 
     @Column(unique = true, nullable = false)
-    private String EnrollmentNo;  //roll
+    private String rollNo;  //roll
 
     private String email;
 
     private String faceId;
 
-//    @OneToMany(mappedBy = "classEntity")
-//    private List<StudentEntity> students;
-
     @ManyToOne
     @JoinColumn(name = "class_id")
-    private ClassEntity classEntity;
+    private ClassEntity batch;
 
 
 
