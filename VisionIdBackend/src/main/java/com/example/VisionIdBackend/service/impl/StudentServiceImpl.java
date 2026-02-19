@@ -3,7 +3,6 @@ package com.example.VisionIdBackend.service.impl;
 import com.example.VisionIdBackend.dto.StudentDto;
 import com.example.VisionIdBackend.entity.ClassEntity;
 import com.example.VisionIdBackend.entity.StudentEntity;
-import com.example.VisionIdBackend.exception.ResourceNotFoundException;
 import com.example.VisionIdBackend.exception.StudentAlreadyExistsException;
 import com.example.VisionIdBackend.mapper.StudentMapper;
 import com.example.VisionIdBackend.repository.ClassRepository;
@@ -76,5 +75,12 @@ public class StudentServiceImpl implements IStudentService {
         return studentDto;
     }
 
+    @Override
+    public void deleteStudentByRoll(String rollNo) {
 
+        StudentEntity studentEntity = studentRepository.findByRollNo(rollNo).orElseThrow(() -> new RuntimeException("Student not found"));
+        studentRepository.delete(studentEntity);
+
+
+    }
 }

@@ -42,5 +42,11 @@ public class StudentController {
         return ResponseEntity.status(HttpStatus.OK).body(studentService.getStudentById(rollNo));
     }
 
+    @DeleteMapping("/deleteStudent")
+    public ResponseEntity<ResponseDto> deleteStudent(@RequestParam String rollNo) {
+
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto("200", "Student Deleted Successfully"));
+    }
+
 
 }

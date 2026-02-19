@@ -9,11 +9,14 @@ import java.util.List;
 
 public interface IStudentService {
 
-    void createStudent(StudentDto studentDto);
+    public void createStudent(StudentDto studentDto);
 
 
     public List<StudentDto> getAllStudents();
 
     public StudentDto getStudentById(String rollNo);
+
+    public void deleteStudentByRoll(String rollNo);
+
 
 }
