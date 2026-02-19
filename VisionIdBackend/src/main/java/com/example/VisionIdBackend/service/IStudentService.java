@@ -18,5 +18,7 @@ public interface IStudentService {
 
     public void deleteStudentByRoll(String rollNo);
 
+    public void fetchAllStudentsByClass(String batch);
+
 
 }

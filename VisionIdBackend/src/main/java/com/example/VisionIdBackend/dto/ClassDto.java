@@ -8,16 +8,8 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class StudentDto {
+public class ClassDto {
 
-
-
-private String name;
-
-private String email;
-private String rollNo;
-
-private String batchCode;
-
+    private String batchCode;
 
 }

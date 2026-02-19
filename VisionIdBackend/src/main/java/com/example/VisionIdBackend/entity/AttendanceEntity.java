@@ -31,7 +31,6 @@ public class AttendanceEntity extends BaseEntity {
 
     private LocalDate date;
 
-    private LocalTime time;
 
 
 
