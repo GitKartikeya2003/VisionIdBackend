@@ -15,4 +15,21 @@ public class StudentMapper {
         return student;
     }
 
+
+    // Entity → DTO
+    public static StudentDto toDto(StudentEntity student) {
+        if (student == null) return null;
+
+        StudentDto dto = new StudentDto();
+        dto.setName(student.getName());
+        dto.setEmail(student.getEmail());
+        dto.setRollNo(student.getRollNo());
+
+        if (student.getBatch() != null) {
+            dto.setBatchCode(student.getBatch().getBatchCode());
+        }
+
+        return dto;
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.example.VisionIdBackend.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,12 +30,7 @@ public class StudentEntity extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "class_id")
+    @JsonBackReference
     private ClassEntity batch;
-
-
-
-
-
-
 
 }

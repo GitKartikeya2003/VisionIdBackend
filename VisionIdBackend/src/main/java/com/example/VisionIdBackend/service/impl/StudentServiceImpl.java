@@ -12,6 +12,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -48,4 +50,20 @@ public class StudentServiceImpl implements IStudentService {
         studentRepository.save(studentEntity);
 
     }
+
+    @Override
+    public List<StudentDto> getAllStudents() {
+        List<StudentEntity> students = studentRepository.findAll();
+
+        List<StudentDto> DtoList = new ArrayList<>();
+
+        for(StudentEntity student : students){
+
+            DtoList.add(StudentMapper.toDto(student));
+        }
+
+        return DtoList;
+    }
+
+
 }

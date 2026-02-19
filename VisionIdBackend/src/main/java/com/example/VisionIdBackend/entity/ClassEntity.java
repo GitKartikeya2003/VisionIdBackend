@@ -1,6 +1,7 @@
 package com.example.VisionIdBackend.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -23,6 +24,7 @@ public class ClassEntity extends BaseEntity {
     private String batchCode;
 
     @OneToMany(mappedBy = "batch")
+    @JsonManagedReference
     private List<StudentEntity> students;
 
 
