@@ -35,4 +35,12 @@ public class StudentController {
     }
 
 
+    @GetMapping("/fetchStudent")
+    public ResponseEntity<StudentDto> fetchStudent(@RequestParam String rollNo) {
+
+
+        return ResponseEntity.status(HttpStatus.OK).body(studentService.getStudentById(rollNo));
+    }
+
+
 }

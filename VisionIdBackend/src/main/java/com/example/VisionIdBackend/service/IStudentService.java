@@ -3,6 +3,7 @@ package com.example.VisionIdBackend.service;
 
 import com.example.VisionIdBackend.dto.StudentDto;
 import com.example.VisionIdBackend.entity.StudentEntity;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -12,5 +13,7 @@ public interface IStudentService {
 
 
     public List<StudentDto> getAllStudents();
+
+    public StudentDto getStudentById(String rollNo);
 
 }
