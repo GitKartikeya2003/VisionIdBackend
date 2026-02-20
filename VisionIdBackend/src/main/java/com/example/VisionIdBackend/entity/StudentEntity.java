@@ -21,7 +21,7 @@ public class StudentEntity extends BaseEntity {
     private String name;
 
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true, nullable = false,updatable = false)
     private String rollNo;  //roll
 
     private String email;

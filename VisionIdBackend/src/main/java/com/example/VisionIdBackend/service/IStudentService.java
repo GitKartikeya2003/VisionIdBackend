@@ -18,7 +18,7 @@ public interface IStudentService {
 
     public void deleteStudentByRoll(String rollNo);
 
-
+     public void updateStudent(StudentDto studentDto);
 
 
 }

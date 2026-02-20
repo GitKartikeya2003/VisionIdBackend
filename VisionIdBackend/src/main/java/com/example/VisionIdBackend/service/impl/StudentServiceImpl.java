@@ -83,4 +83,23 @@ public class StudentServiceImpl implements IStudentService {
 
 
     }
+
+    @Override
+    public void updateStudent(StudentDto studentDto) {
+
+        StudentEntity studentEntity = studentRepository.findByRollNo(studentDto.getRollNo()).orElseThrow(() -> new RuntimeException("Student not found"));
+
+        studentRepository.delete(studentEntity);
+
+        StudentEntity updatedStudentEntity = StudentMapper.mapToStudentEntity(studentDto);
+
+        ClassEntity batch = classRepository
+                .findByBatchCode(studentDto.getBatchCode())
+                .orElseThrow(() -> new RuntimeException("Batch not found"));
+
+        updatedStudentEntity.setBatch(batch);
+
+
+        studentRepository.save(updatedStudentEntity);
+    }
 }

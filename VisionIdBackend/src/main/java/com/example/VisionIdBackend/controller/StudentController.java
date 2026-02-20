@@ -49,4 +49,13 @@ public class StudentController {
     }
 
 
+
+    @PutMapping("/updateStudent")
+    public ResponseEntity<ResponseDto> updateStudent(@RequestBody StudentDto studentDto) {
+
+        studentService.updateStudent(studentDto);
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto("200", "Student Updated Successfully"));
+    }
+
+
 }
