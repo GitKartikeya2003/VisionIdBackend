@@ -2,6 +2,7 @@ package com.example.VisionIdBackend.service.impl;
 
 
 import com.example.VisionIdBackend.dto.ClassDto;
+import com.example.VisionIdBackend.dto.StudentDto;
 import com.example.VisionIdBackend.entity.ClassEntity;
 import com.example.VisionIdBackend.entity.StudentEntity;
 import com.example.VisionIdBackend.exception.ClassAlreadyExistsException;
@@ -48,6 +49,27 @@ public class ClassServiceImpl implements IClassService {
         classDtoList.add(classDto);
         }
         return classDtoList;
+
+    }
+
+    @Override
+    public List<StudentDto> fetchAllStudentsByClass(ClassDto classDto) {
+
+           ClassEntity batch = classRepository
+                .findByBatchCode(classDto.getBatchCode())
+                .orElseThrow(() -> new RuntimeException("Batch not found"));
+
+           List<StudentEntity> studentEntities = batch.getStudents();
+           List<StudentDto> studentDtoList = new ArrayList<>();
+
+
+           for(StudentEntity studentEntity : studentEntities) {
+
+               StudentDto studentDto = StudentMapper.toDto(studentEntity);
+               studentDtoList.add(studentDto);
+           }
+
+           return studentDtoList;
 
     }
 }

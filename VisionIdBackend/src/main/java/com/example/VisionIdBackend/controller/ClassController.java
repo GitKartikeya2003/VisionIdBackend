@@ -43,11 +43,10 @@ public class ClassController {
 
     //Heart of VisionId
     @GetMapping("/getStudentsByClass")
-    private ResponseEntity<List<StudentDto>> getStudentsByClass(@RequestParam String batchcode){
+    private ResponseEntity<List<StudentDto>> getStudentsByClass(@RequestBody ClassDto classDto){
 
-        List<StudentDto> students;
-
-        return ResponseEntity.status(HttpStatus.OK).body()
+        List<StudentDto> students= classService.fetchAllStudentsByClass(classDto);
+        return ResponseEntity.status(HttpStatus.OK).body(students);
 
     }
 
