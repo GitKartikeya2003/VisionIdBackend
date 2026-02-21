@@ -11,5 +11,5 @@ import java.util.Optional;
 @Repository
 public interface TeacherRepository extends JpaRepository<TeacherEntity,Long>{
 
-    TeacherEntity findByUsername(String username);
+    TeacherEntity findByUid(String username);
 }

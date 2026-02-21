@@ -22,7 +22,8 @@ public class TeacherEntity extends BaseEntity {
     private String name;
     private String role;
 
-    private String username;
+    @Column(unique = true, nullable = false)
+    private String uid;    //Unique id
 
     private String password;
 }
