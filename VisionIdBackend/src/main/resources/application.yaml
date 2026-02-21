@@ -15,5 +15,10 @@ spring:
       mode: always
 
 
+server:
+  servlet:
+    session:
+      cookie:
+        same-site: strict
 #  So yes —
 #  @Entity + ddl-auto: update = automatic table creation.
