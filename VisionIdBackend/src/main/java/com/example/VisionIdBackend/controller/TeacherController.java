@@ -3,6 +3,8 @@ package com.example.VisionIdBackend.controller;
 
 import com.example.VisionIdBackend.dto.ResponseDto;
 import com.example.VisionIdBackend.dto.TeacherDto;
+import com.example.VisionIdBackend.dto.loginDtos.LoginRequestDto;
+import com.example.VisionIdBackend.dto.loginDtos.LoginResponseDto;
 import com.example.VisionIdBackend.service.ITeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,6 +27,14 @@ public class TeacherController {
 
         service.register(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDto("201", "Faculty registered successfully"));
+
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto dto) {
+        String response =  service.login(dto);
+
+        return ResponseEntity.status(HttpStatus.OK).body(new LoginResponseDto(response));
 
     }
 
