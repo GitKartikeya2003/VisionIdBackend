@@ -21,16 +21,14 @@ public interface AttendanceRepository extends CrudRepository<AttendanceEntity, L
 
     boolean existsByStudentEntity_BatchAndDateAndSubjectEntity_Code(ClassEntity batch, LocalDate date, String subjectCode);
 
-    boolean existsByDateAndSubjectEntity_SubjectName(
-            LocalDate date,
-            String subjectName
-    );
+    boolean existsByDateAndSubjectEntity_SubjectName(LocalDate date, String subjectName);
 
-    Optional<List<AttendanceEntity>> findByDateAndSubjectEntity_SubjectName(
+    // ✅ FIXED: added MarkedBy_Uid so only the calling teacher's records are returned
+    Optional<List<AttendanceEntity>> findByDateAndSubjectEntity_SubjectNameAndMarkedBy_Uid(
             LocalDate date,
-            String subjectName
+            String subjectName,
+            String teacherUid
     );
-
 
     @Query("""
                 SELECT DISTINCT a.studentEntity
@@ -45,12 +43,30 @@ public interface AttendanceRepository extends CrudRepository<AttendanceEntity, L
             @Param("batchCode") String batchCode
     );
 
+    // ✅ NEW: counts how many distinct dates THIS teacher took class
+    // for THIS subject in THIS batch specifically.
+    // This gives the correct per-teacher, per-batch total class count
+    // as the denominator for attendance percentage.
+    @Query("""
+                SELECT COUNT(DISTINCT a.date)
+                FROM AttendanceEntity a
+                WHERE a.markedBy.uid = :teacherUid
+                AND a.subjectEntity.code = :subjectCode
+                AND a.studentEntity.batch.batchCode = :batchCode
+            """)
+    long countDistinctDatesByTeacherAndSubjectAndBatch(
+            @Param("teacherUid") String teacherUid,
+            @Param("subjectCode") String subjectCode,
+            @Param("batchCode") String batchCode
+    );
+
     long countByStudentEntityAndMarkedBy_UidAndSubjectEntity_Code(
             StudentEntity studentEntity,
             String teacherUid,
             String subjectCode
     );
 
+    // ✅ This one was already correct — uid scoped
     long countByStudentEntityAndMarkedBy_UidAndSubjectEntity_CodeAndStatus(
             StudentEntity studentEntity,
             String teacherUid,
@@ -58,6 +74,8 @@ public interface AttendanceRepository extends CrudRepository<AttendanceEntity, L
             AttendanceStatus status
     );
 
+    // These two below have no uid filter — kept for other uses but
+    // NOT used in percentage calculation anymore
     long countByStudentEntityAndSubjectEntity_Code(
             StudentEntity studentEntity,
             String subjectCode

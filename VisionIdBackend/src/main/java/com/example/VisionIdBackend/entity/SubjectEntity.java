@@ -24,6 +24,5 @@ public class SubjectEntity {
 
     private String subjectName;
 
-    private int totalClasses;
 
 }
