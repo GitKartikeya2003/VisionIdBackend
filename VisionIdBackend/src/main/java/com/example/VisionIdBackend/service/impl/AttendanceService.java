@@ -61,9 +61,9 @@ public class AttendanceService implements IAttendanceService {
 
 
         if (attendanceRepository
-                .existsByStudentEntity_BatchAndDate(classEntity, request.getDate())) {
+                .existsByStudentEntity_BatchAndDateAndSubjectEntity_Code(classEntity, request.getDate(), request.getSubjectCode())) {
 
-            throw new RuntimeException("Attendance already marked for this date");
+            throw new RuntimeException("Attendance already marked for this date and subject");
         }
 
 

@@ -19,7 +19,7 @@ public interface AttendanceRepository extends CrudRepository<AttendanceEntity, L
 
     Optional<AttendanceEntity> findByStudentEntityAndDate(StudentEntity student, LocalDate date);
 
-    boolean existsByStudentEntity_BatchAndDate(ClassEntity batch, LocalDate date);
+    boolean existsByStudentEntity_BatchAndDateAndSubjectEntity_Code(ClassEntity batch, LocalDate date, String subjectCode);
 
     boolean existsByDateAndSubjectEntity_SubjectName(
             LocalDate date,
