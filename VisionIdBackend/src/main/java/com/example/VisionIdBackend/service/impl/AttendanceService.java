@@ -2,6 +2,7 @@ package com.example.VisionIdBackend.service.impl;
 
 
 import com.example.VisionIdBackend.dto.ai.AIRequestDto;
+import com.example.VisionIdBackend.dto.attendanceDtos.dateAttendanceDto;
 import com.example.VisionIdBackend.entity.*;
 import com.example.VisionIdBackend.entity.enums.AttendanceStatus;
 import com.example.VisionIdBackend.exception.ResourceNotFoundException;
@@ -89,8 +90,24 @@ public class AttendanceService implements IAttendanceService {
         attendanceRepository.saveAll(attendanceList);
 
 
-
         return students;
 
+    }
+
+    @Override
+    public List<AttendanceEntity> getAttendance_forDate_Subject(dateAttendanceDto dto,String uid) {
+        TeacherEntity teacher = teacherRepository.findByUid(uid);
+
+        if(teacher == null){
+            throw new  ResourceNotFoundException("Teacher not found");
+        }
+
+        List<AttendanceEntity> attendanceEntities = attendanceRepository.findByDateAndSubjectEntity_SubjectName(dto.getDate(), dto.getSubject()).orElseThrow(
+                () -> new ResourceNotFoundException("Attendance for Subject or Date does not exists")
+        );
+
+
+
+        return attendanceEntities;
     }
 }
