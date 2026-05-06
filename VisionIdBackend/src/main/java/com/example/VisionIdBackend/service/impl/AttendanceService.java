@@ -2,11 +2,14 @@ package com.example.VisionIdBackend.service.impl;
 
 
 import com.example.VisionIdBackend.dto.ai.AIRequestDto;
+import com.example.VisionIdBackend.dto.attendanceDtos.AttendanceDto;
+import com.example.VisionIdBackend.dto.attendanceDtos.StudentAttendanceDto;
 import com.example.VisionIdBackend.dto.attendanceDtos.dateAttendanceDto;
 import com.example.VisionIdBackend.entity.*;
 import com.example.VisionIdBackend.entity.enums.AttendanceStatus;
 import com.example.VisionIdBackend.exception.ResourceNotFoundException;
 import com.example.VisionIdBackend.exception.TeacherAlreadyExistsException;
+import com.example.VisionIdBackend.mapper.AttendanceMapper;
 import com.example.VisionIdBackend.repository.*;
 import com.example.VisionIdBackend.service.IAttendanceService;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +38,9 @@ public class AttendanceService implements IAttendanceService {
         SubjectEntity entity = subjectRepository.findByCode(request.getSubjectCode()).orElseThrow(
                 () -> new ResourceNotFoundException("Subject does not exists"));
 
+        int earlier_classes = entity.getTotalClasses();
+        earlier_classes += 1;
+        entity.setTotalClasses(earlier_classes);
 
         ClassEntity classEntity = classRepository
                 .findByBatchCode(request.getBatchCode())
@@ -95,11 +101,11 @@ public class AttendanceService implements IAttendanceService {
     }
 
     @Override
-    public List<AttendanceEntity> getAttendance_forDate_Subject(dateAttendanceDto dto,String uid) {
+    public List<AttendanceEntity> getAttendance_forDate_Subject(dateAttendanceDto dto, String uid) {
         TeacherEntity teacher = teacherRepository.findByUid(uid);
 
-        if(teacher == null){
-            throw new  ResourceNotFoundException("Teacher not found");
+        if (teacher == null) {
+            throw new ResourceNotFoundException("Teacher not found");
         }
 
         List<AttendanceEntity> attendanceEntities = attendanceRepository.findByDateAndSubjectEntity_SubjectName(dto.getDate(), dto.getSubject()).orElseThrow(
@@ -107,7 +113,32 @@ public class AttendanceService implements IAttendanceService {
         );
 
 
-
         return attendanceEntities;
+    }
+
+    @Override
+    public List<StudentAttendanceDto> getAttendance_ForStudents_BatchWise(AttendanceDto dto, String uid) {
+
+
+        TeacherEntity teacher = teacherRepository.findByUid(uid);
+
+        if (teacher == null) {
+            throw new ResourceNotFoundException("Teacher not found");
+        }
+
+        List<StudentEntity> students = attendanceRepository.findStudentsByTeacherAndSubjectAndBatch(uid, dto.getSubject(), dto.getBatchCode()).orElseThrow(
+                () -> new ResourceNotFoundException("Students not found as per requirements")
+        );
+
+        List<StudentAttendanceDto> studentAttendanceDtoList = new ArrayList<>();
+
+        for(StudentEntity student : students) {
+
+
+            StudentAttendanceDto s = AttendanceMapper.toStudentAttendanceDto(student,0.0);
+            studentAttendanceDtoList.add(s);
+        }
+
+        return studentAttendanceDtoList;
     }
 }

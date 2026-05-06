@@ -21,6 +21,9 @@ public class SubjectEntity {
     @Id
     @Column(unique = true, nullable = false)
     private String code;
+
     private String subjectName;
+
+    private int totalClasses;
 
 }

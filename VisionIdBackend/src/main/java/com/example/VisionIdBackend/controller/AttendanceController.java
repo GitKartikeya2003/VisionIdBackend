@@ -2,6 +2,8 @@ package com.example.VisionIdBackend.controller;
 
 
 import com.example.VisionIdBackend.dto.SubjectDTO;
+import com.example.VisionIdBackend.dto.attendanceDtos.AttendanceDto;
+import com.example.VisionIdBackend.dto.attendanceDtos.StudentAttendanceDto;
 import com.example.VisionIdBackend.dto.attendanceDtos.dateAttendanceDto;
 import com.example.VisionIdBackend.entity.AttendanceEntity;
 import com.example.VisionIdBackend.entity.SubjectEntity;
@@ -49,18 +51,26 @@ public class AttendanceController {
         String token = authHeader.substring(7); // removes "Bearer "
         String uid = jwtService.extractUid(token);
 
-        List<AttendanceEntity> students = attendanceService.getAttendance_forDate_Subject(dto,uid);
+        List<AttendanceEntity> students = attendanceService.getAttendance_forDate_Subject(dto, uid);
 
         return ResponseEntity.status(HttpStatus.OK).body(students);
 
     }
 
 
-//    @GetMapping("/get-attendance-per-allstudents/{subject}")
-//    public ResponseEntity<String> getAttendance(@PathVariable String subjectName) {
-//
-//
-//    }
+    @GetMapping("/get-percentage-attendanceOfAllStudents/")
+    public ResponseEntity<List<AttendanceEntity>> getPercentageAttendance(@RequestBody AttendanceDto dto
+            , @RequestHeader("Authorization") String authHeader) {
+
+
+        String token = authHeader.substring(7);
+        String uid = jwtService.extractUid(token);
+
+        List<StudentAttendanceDto> students =;
+
+
+        return ResponseEntity.status(HttpStatus.OK).body();
+    }
 
 
 }
