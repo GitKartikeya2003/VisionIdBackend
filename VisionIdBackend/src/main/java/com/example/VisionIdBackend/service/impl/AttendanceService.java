@@ -35,8 +35,6 @@ public class AttendanceService implements IAttendanceService {
         SubjectEntity entity = subjectRepository.findByCode(request.getSubjectCode()).orElseThrow(
                 () -> new ResourceNotFoundException("Subject does not exist"));
 
-        // NOTE: We no longer touch entity.totalClasses here.
-        // totalClasses is now computed dynamically per teacher+batch from attendance records.
 
         ClassEntity classEntity = classRepository
                 .findByBatchCode(request.getBatchCode())
@@ -114,19 +112,7 @@ public class AttendanceService implements IAttendanceService {
                 () -> new ResourceNotFoundException("Subject not found")
         );
 
-        // ✅ FIXED: totalClasses is now the count of DISTINCT dates this teacher
-        // conducted class for this specific subject + this specific batch.
-        //
-        // Old bug: subjectEntity.getTotalClasses() was a single global integer.
-        // It was incremented once per upload regardless of teacher or batch,
-        // so Teacher A + Teacher B both uploading = totalClasses 2 for everyone.
-        // Also: it was 1 per upload but there are N students → ratio was
-        // classesAttended(0 or 1) / 1 = always 0% or 100%.
-        //
-        // Now: if Teacher A takes Batch CS-A for subject MATH on 3 dates,
-        // totalClasses = 3 for that teacher+batch combo only.
-        // Teacher B taking the same subject for the same batch independently
-        // gets their own count of 0 until they upload.
+
         long totalClassesForSubject = attendanceRepository
                 .countDistinctDatesByTeacherAndSubjectAndBatch(uid, dto.getSubject(), dto.getBatchCode());
 
@@ -137,8 +123,6 @@ public class AttendanceService implements IAttendanceService {
 
         return students.stream()
                 .map(student -> {
-                    // ✅ FIXED: was countByStudentEntityAndSubjectEntity_CodeAndStatus (no uid filter)
-                    // Now scoped to this teacher's uid → Teacher B cannot see Teacher A's present count
                     long classesAttended = attendanceRepository
                             .countByStudentEntityAndMarkedBy_UidAndSubjectEntity_CodeAndStatus(
                                     student,

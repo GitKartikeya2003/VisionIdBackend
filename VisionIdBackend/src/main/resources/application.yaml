@@ -22,3 +22,7 @@ server:
 
 frontend:
   url: ${FRONTEND_URL}
+
+jwt:
+  secret: ${JWT_SECRET}
+  expiration: ${JWT_EXPIRATION:86400000}
