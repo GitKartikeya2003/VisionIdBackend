@@ -3,6 +3,7 @@ package com.example.VisionIdBackend.security.config;
 
 import com.example.VisionIdBackend.security.config.filters.JwtFilter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -55,7 +56,7 @@ public class SecurityConfig {
                 .anyRequest().authenticated());
 
         //http.formLogin(Customizer.withDefaults());
-        http.httpBasic(Customizer.withDefaults());
+        // http.httpBasic(Customizer.withDefaults());
         http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
@@ -70,10 +71,13 @@ public class SecurityConfig {
     }
 
 
+    @Value("${frontend.url}")
+    private String frontendUrl;
+
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.addAllowedOrigin("http://localhost:5173");
+        config.addAllowedOrigin(frontendUrl);
         config.addAllowedMethod("*");
         config.addAllowedHeader("*");
         config.setAllowCredentials(true);
@@ -82,6 +86,5 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", config);
         return source;
     }
-
 }
 
