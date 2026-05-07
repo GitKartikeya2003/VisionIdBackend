@@ -28,7 +28,8 @@ public class AiController {
 
     @PostMapping("/attendance/ai-upload")
     private ResponseEntity<List<StudentEntity>> uploadAttendance(@RequestBody AIRequestDto aiRequestDto
-            , @RequestHeader("Authorization") String authHeader) {
+            , @RequestHeader("Authorization") String authHeader
+    ) {
 
 
         String token = authHeader.substring(7);
