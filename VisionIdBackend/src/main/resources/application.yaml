@@ -1,24 +1,21 @@
 spring:
   application:
-    name: VisionIdBackend
+    name: ${APP_NAME:VisionIdBackend}
   datasource:
-    url: jdbc:mysql://localhost:3306/attendancedb
-    username: root
-    password: root
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
   jpa:
     hibernate:
-      ddl-auto: update
-    defer-datasource-initialization: true # “First let Hibernate create tables, then run sql script”
-    show-sql: true
+      ddl-auto: ${JPA_DDL_AUTO:update}
+    defer-datasource-initialization: true
+    show-sql: ${SHOW_SQL:true}
   sql:
     init:
-      mode: always
-
+      mode: ${SQL_INIT_MODE:always}
 
 server:
   servlet:
     session:
       cookie:
         same-site: strict
-#  So yes —
-#  @Entity + ddl-auto: update = automatic table creation.
